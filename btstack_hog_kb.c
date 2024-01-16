@@ -285,6 +285,14 @@ static void packet_handler (uint8_t packet_type, uint16_t channel, uint8_t *pack
     if (packet_type != HCI_EVENT_PACKET) return;
 
     switch (hci_event_packet_get_type(packet)) {
+
+        case HCI_EVENT_PIN_CODE_REQUEST:
+          // pre-ssp: inform about pin code request
+          printf("Pin code request - using '0000'\n");
+          bt_flip_addr(event_addr, &packet[2]);
+          hci_send_cmd(&hci_pin_code_request_reply, &event_addr, 4, "0000");
+          break;
+
         case HCI_EVENT_DISCONNECTION_COMPLETE:
             con_handle = HCI_CON_HANDLE_INVALID;
             printf("Disconnected\n");
