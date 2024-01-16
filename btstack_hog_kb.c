@@ -48,7 +48,7 @@
 #include <string.h>
 #include <inttypes.h>
 
-#include "hog_keyboard_demo.h"
+#include "btstack_hog_kb.h"
 
 #include "btstack.h"
 

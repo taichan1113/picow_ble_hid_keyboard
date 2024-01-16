@@ -50,7 +50,8 @@ target_include_directories(picow_ble_hid_keyboard PRIVATE
   ${CMAKE_CURRENT_LIST_DIR}
   ${CMAKE_CURRENT_LIST_DIR}/.. # for our common lwipopts or any other standard includes, if required
 )
-pico_btstack_make_gatt_header(picow_ble_hid_keyboard PRIVATE "${CMAKE_CURRENT_LIST_DIR}/picow_ble_hid_keyboard.gatt")
+pico_btstack_make_gatt_header(picow_ble_hid_keyboard PRIVATE 
+  "${CMAKE_CURRENT_LIST_DIR}/picow_ble_hid_keyboard.gatt")
 
 # Add any user requested libraries   ----------
 target_link_libraries(picow_ble_hid_keyboard
