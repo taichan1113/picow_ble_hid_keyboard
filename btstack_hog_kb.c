@@ -153,11 +153,12 @@ static void le_keyboard_setup(void){
     // setup SM: Display only
     sm_init();
 
-    sm_set_er(0x31);
-    sm_set_ir(0x91);
+    // sm_set_er(0x31);
+    // sm_set_ir(0x91);
 
     sm_set_io_capabilities(IO_CAPABILITY_DISPLAY_ONLY);
     sm_set_authentication_requirements(SM_AUTHREQ_SECURE_CONNECTION | SM_AUTHREQ_BONDING);
+
     sm_set_secure_connections_only_mode(true);
 
     // setup ATT server
@@ -330,7 +331,7 @@ static void packet_handler (uint8_t packet_type, uint16_t channel, uint8_t *pack
     }
 }
 
-int btstack_main(void);
+// int btstack_main(void);
 int btstack_main(void)
 {
     le_keyboard_setup();
