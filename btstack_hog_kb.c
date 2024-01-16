@@ -152,8 +152,13 @@ static void le_keyboard_setup(void){
 
     // setup SM: Display only
     sm_init();
+
+    sm_set_er(0x31);
+    sm_set_ir(0x91);
+
     sm_set_io_capabilities(IO_CAPABILITY_DISPLAY_ONLY);
     sm_set_authentication_requirements(SM_AUTHREQ_SECURE_CONNECTION | SM_AUTHREQ_BONDING);
+    sm_set_secure_connections_only_mode(true);
 
     // setup ATT server
     att_server_init(profile_data, NULL, NULL);
@@ -266,18 +271,6 @@ static void typing_timer_handler(btstack_timer_source_t * ts){
     hids_device_request_can_send_now_event(con_handle);
 }
 
-// static void hid_embedded_start_typing(void){
-//     printf("Start typing..\n");
-
-//     demo_pos = 0;
-//     // set one-shot timer
-//     typing_timer.process = &typing_timer_handler;
-//     btstack_run_loop_set_timer(&typing_timer, TYPING_PERIOD_MS);
-//     btstack_run_loop_add_timer(&typing_timer);
-// }
-
-
-
 static void packet_handler (uint8_t packet_type, uint16_t channel, uint8_t *packet, uint16_t size){
     UNUSED(channel);
     UNUSED(size);
@@ -286,12 +279,6 @@ static void packet_handler (uint8_t packet_type, uint16_t channel, uint8_t *pack
 
     switch (hci_event_packet_get_type(packet)) {
 
-        // case HCI_EVENT_PIN_CODE_REQUEST:
-        //   // pre-ssp: inform about pin code request
-        //   printf("Pin code request - using '0000'\n");
-        //   bt_flip_addr(event_addr, &packet[2]);
-        //   hci_send_cmd(&hci_pin_code_request_reply, &event_addr, 4, "0000");
-        //   break;
 
         case HCI_EVENT_DISCONNECTION_COMPLETE:
             con_handle = HCI_CON_HANDLE_INVALID;
@@ -326,9 +313,8 @@ static void packet_handler (uint8_t packet_type, uint16_t channel, uint8_t *pack
                 
                     // send_report(send_modifier, send_keycode);
 
-                    btstack_run_loop_set_timer_handler(&typing_timer, typing_timer_handler);
-                    // typing_timer.process = &typing_timer_handler;
-                    
+                    // btstack_run_loop_set_timer_handler(&typing_timer, typing_timer_handler);
+                    typing_timer.process = &typing_timer_handler;
                     btstack_run_loop_set_timer(&typing_timer, TYPING_PERIOD_MS);
                     btstack_run_loop_add_timer(&typing_timer);
 
