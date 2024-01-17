@@ -249,35 +249,6 @@ static void typing_timer_handler(btstack_timer_source_t *ts)
     btstack_run_loop_add_timer(ts);
 }
 
-static void typing_timer_handler_copy(btstack_timer_source_t *ts)
-{
-
-    if (send_keyup)
-    {
-        // just send key up
-        send_keyup = 0;
-        send_key(0, 0);
-    }
-    else
-    {
-        // get keycode and send
-        struct
-        {
-            uint8_t modifier;   /**< Keyboard modifier (KEYBOARD_MODIFIER_* masks). */
-            uint8_t reserved;   /**< Reserved for OEM use, always set to 0. */
-            uint8_t keycode[6]; /**< Key codes of the currently pressed keys. */
-        } report_q;
-        if (queue_try_remove(&hid_keyboard_report_queue, &report_q)){
-            send_key(modifier, keycode);
-            send_keyup = 1;
-        }
-    }
-
-    // set next timer
-    btstack_run_loop_set_timer(ts, TYPING_PERIOD_MS);
-    btstack_run_loop_add_timer(ts);
-}
-
 static void packet_handler(uint8_t packet_type, uint16_t channel, uint8_t *packet, uint16_t size)
 {
     UNUSED(channel);
