@@ -196,10 +196,10 @@ static void send_report(int modifier, int keycode)
     switch (protocol_mode)
     {
     case 0:
-        hids_device_send_boot_keyboard_input_report(con_handle, &report, sizeof(report));
+        hids_device_send_boot_keyboard_input_report(con_handle, report, sizeof(report));
         break;
     case 1:
-        hids_device_send_input_report(con_handle, &report, sizeof(report));
+        hids_device_send_input_report(con_handle, report, sizeof(report));
         break;
     default:
         break;
