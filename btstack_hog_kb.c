@@ -59,8 +59,6 @@
 #include "pico/util/queue.h"
 extern queue_t hid_keyboard_report_queue;
 
-#define REPORT_ID 0x01
-
 // from USB HID Specification 1.1, Appendix B.1
 const uint8_t hid_descriptor_keyboard_boot_mode[] = {
 
@@ -68,7 +66,7 @@ const uint8_t hid_descriptor_keyboard_boot_mode[] = {
     0x09, 0x06,                    // Usage (Keyboard)
     0xa1, 0x01,                    // Collection (Application)
 
-    0x85,  REPORT_ID,                   // Report ID 1
+    0x85, 0x01,                   // Report ID 1
 
     // Modifier byte
 
@@ -114,16 +112,11 @@ const uint8_t hid_descriptor_keyboard_boot_mode[] = {
     0xc0,                          // End collection
 };
 
-
-
-//
-// #define CHAR_ILLEGAL     0xff
-// #define CHAR_RETURN     '\n'
-// #define CHAR_ESCAPE      27
-// #define CHAR_TAB         '\t'
-// #define CHAR_BACKSPACE   0x7f
-
-// Simplified US Keyboard with Shift modifier
+#define CHAR_ILLEGAL     0xff
+#define CHAR_RETURN     '\n'
+#define CHAR_ESCAPE      27
+#define CHAR_TAB         '\t'
+#define CHAR_BACKSPACE   0x7f
 
 // static btstack_timer_source_t heartbeat;
 static btstack_packet_callback_registration_t hci_event_callback_registration;
@@ -156,10 +149,10 @@ static void le_keyboard_setup(void){
     // sm_set_er(0x31);
     // sm_set_ir(0x91);
 
-    sm_set_io_capabilities(IO_CAPABILITY_DISPLAY_ONLY);
-    sm_set_authentication_requirements(SM_AUTHREQ_SECURE_CONNECTION | SM_AUTHREQ_BONDING);
+    // sm_set_io_capabilities(IO_CAPABILITY_DISPLAY_ONLY);
+    // sm_set_authentication_requirements(SM_AUTHREQ_SECURE_CONNECTION | SM_AUTHREQ_BONDING);
 
-    sm_set_secure_connections_only_mode(true);
+    // sm_set_secure_connections_only_mode(true);
 
     // setup ATT server
     att_server_init(profile_data, NULL, NULL);
