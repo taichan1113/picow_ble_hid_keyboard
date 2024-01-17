@@ -262,6 +262,9 @@ static void packet_handler(uint8_t packet_type, uint16_t channel, uint8_t *packe
             con_handle = hids_subevent_input_report_enable_get_con_handle(packet);
             printf("Report Characteristic Subscribed %u\n", hids_subevent_input_report_enable_get_enable(packet));
             // hid_embedded_start_typing();
+            typing_timer.process = &typing_timer_handler;
+            btstack_run_loop_set_timer(&typing_timer, TYPING_PERIOD_MS);
+            btstack_run_loop_add_timer(&typing_timer);
             break;
         case HIDS_SUBEVENT_BOOT_KEYBOARD_INPUT_REPORT_ENABLE:
             con_handle = hids_subevent_boot_keyboard_input_report_enable_get_con_handle(packet);
