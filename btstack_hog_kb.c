@@ -196,10 +196,10 @@ static void send_report(int modifier, int keycode)
     switch (protocol_mode)
     {
     case 0:
-        hids_device_send_boot_keyboard_input_report(con_handle, report, sizeof(report));
+        hids_device_send_boot_keyboard_input_report(con_handle, &report, sizeof(report));
         break;
     case 1:
-        hids_device_send_input_report(con_handle, report, sizeof(report));
+        hids_device_send_input_report(con_handle, &report, sizeof(report));
         break;
     default:
         break;
@@ -225,8 +225,7 @@ static void typing_timer_handler(btstack_timer_source_t *ts)
     if (queue_try_remove(&hid_keyboard_report_queue, &report_q)){
         uint8_t report[] = { report_q.modifier, 0, 
                     report_q.keycode[0],report_q.keycode[1],report_q.keycode[2],report_q.keycode[3],report_q.keycode[4],report_q.keycode[5]};
-        // hids_device_send_input_report(con_handle, report, sizeof(report));
-        hid_device_send_interrupt_message(con_handle, &report[0], sizeof(report));
+        hids_device_send_input_report(con_handle, &report, sizeof(report));
     }
 
     hids_device_request_can_send_now_event(con_handle);
@@ -266,8 +265,8 @@ static void packet_handler(uint8_t packet_type, uint16_t channel, uint8_t *packe
             con_handle = hids_subevent_input_report_enable_get_con_handle(packet);
             printf("Report Characteristic Subscribed %u\n", hids_subevent_input_report_enable_get_enable(packet));
             // hid_embedded_start_typing();
-            btstack_run_loop_set_timer_handler(&typing_timer, typing_timer_handler);
-            // typing_timer.process = &typing_timer_handler;
+            // btstack_run_loop_set_timer_handler(&typing_timer, typing_timer_handler);
+            typing_timer.process = &typing_timer_handler;
             btstack_run_loop_set_timer(&typing_timer, TYPING_PERIOD_MS);
             btstack_run_loop_add_timer(&typing_timer);
             break;
@@ -281,8 +280,8 @@ static void packet_handler(uint8_t packet_type, uint16_t channel, uint8_t *packe
             break;
         case HIDS_SUBEVENT_CAN_SEND_NOW:
             // send_report(send_modifier, send_keycode);
-            btstack_run_loop_set_timer_handler(&typing_timer, typing_timer_handler);
-            // typing_timer.process = &typing_timer_handler;
+            // btstack_run_loop_set_timer_handler(&typing_timer, typing_timer_handler);
+            typing_timer.process = &typing_timer_handler;
             btstack_run_loop_set_timer(&typing_timer, TYPING_PERIOD_MS);
             btstack_run_loop_add_timer(&typing_timer);
 
