@@ -123,7 +123,8 @@ static btstack_packet_callback_registration_t hci_event_callback_registration;
 static btstack_packet_callback_registration_t sm_event_callback_registration;
 static uint8_t battery = 100;
 static hci_con_handle_t con_handle = HCI_CON_HANDLE_INVALID;
-static uint8_t protocol_mode = 1;
+// static uint8_t protocol_mode = 1;
+static uint8_t protocol_mode = HID_PROTOCOL_MODE_REPORT;
 
 static void packet_handler(uint8_t packet_type, uint16_t channel, uint8_t *packet, uint16_t size);
 
@@ -187,21 +188,21 @@ static void le_keyboard_setup(void)
 }
 
 // HID Report sending
-static void send_report(int modifier, int keycode)
-{
-    uint8_t report[] = {modifier, 0, keycode, 0, 0, 0, 0, 0};
-    switch (protocol_mode)
-    {
-    case 0:
-        hids_device_send_boot_keyboard_input_report(con_handle, report, sizeof(report));
-        break;
-    case 1:
-        hids_device_send_input_report(con_handle, report, sizeof(report));
-        break;
-    default:
-        break;
-    }
-}
+// static void send_report(int modifier, int keycode)
+// {
+//     uint8_t report[] = {modifier, 0, keycode, 0, 0, 0, 0, 0};
+//     switch (protocol_mode)
+//     {
+//     case 0:
+//         hids_device_send_boot_keyboard_input_report(con_handle, report, sizeof(report));
+//         break;
+//     case 1:
+//         hids_device_send_input_report(con_handle, report, sizeof(report));
+//         break;
+//     default:
+//         break;
+//     }
+// }
 
 // On embedded systems, send constant demo text with fixed period
 
@@ -222,7 +223,18 @@ static void typing_timer_handler(btstack_timer_source_t *ts)
     if (queue_try_remove(&hid_keyboard_report_queue, &report_q)){
         uint8_t report[] = { report_q.modifier, 0, 
                     report_q.keycode[0],report_q.keycode[1],report_q.keycode[2],report_q.keycode[3],report_q.keycode[4],report_q.keycode[5]};
-        hids_device_send_input_report(con_handle, report, sizeof(report));
+        // hids_device_send_input_report(con_handle, report, sizeof(report));
+        switch (protocol_mode)
+            {
+            case 0:
+                hids_device_send_boot_keyboard_input_report(con_handle, report, sizeof(report));
+                break;
+            case 1:
+                hids_device_send_input_report(con_handle, report, sizeof(report));
+                break;
+            default:
+                break;
+            }
     }
 
     hids_device_request_can_send_now_event(con_handle);
