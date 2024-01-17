@@ -212,18 +212,6 @@ static void send_report(int modifier, int keycode)
 
 static btstack_timer_source_t typing_timer;
 
-static int send_keycode;
-static int send_modifier;
-static int send_keyup;
-
-static void send_key(int modifier, int keycode)
-{
-    send_keycode = keycode;
-    send_modifier = modifier;
-    hids_device_request_can_send_now_event(con_handle);
-}
-
-
 static void typing_timer_handler(btstack_timer_source_t *ts)
 {
     // get keycode and send
@@ -238,14 +226,10 @@ static void typing_timer_handler(btstack_timer_source_t *ts)
         uint8_t report[] = { report_q.modifier, 0, 
                     report_q.keycode[0],report_q.keycode[1],report_q.keycode[2],report_q.keycode[3],report_q.keycode[4],report_q.keycode[5]};
         hids_device_send_input_report(con_handle, report, sizeof(report));
-
-        send_key(report_q.modifier, report_q.keycode[0]);
     }
 
+    hids_device_request_can_send_now_event(con_handle);
 
-    // set next timer
-    btstack_run_loop_set_timer(ts, TYPING_PERIOD_MS);
-    btstack_run_loop_add_timer(ts);
 }
 
 static void packet_handler(uint8_t packet_type, uint16_t channel, uint8_t *packet, uint16_t size)
@@ -292,8 +276,8 @@ static void packet_handler(uint8_t packet_type, uint16_t channel, uint8_t *packe
             break;
         case HIDS_SUBEVENT_CAN_SEND_NOW:
             // send_report(send_modifier, send_keycode);
-            btstack_run_loop_set_timer_handler(&typing_timer, typing_timer_handler);
-            // typing_timer.process = &typing_timer_handler;
+            // btstack_run_loop_set_timer_handler(&typing_timer, typing_timer_handler);
+            typing_timer.process = &typing_timer_handler;
             btstack_run_loop_set_timer(&typing_timer, TYPING_PERIOD_MS);
             btstack_run_loop_add_timer(&typing_timer);
 
