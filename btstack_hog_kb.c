@@ -144,12 +144,8 @@ static void le_keyboard_setup(void)
 
     l2cap_init();
 
-    // setup SM: Display only
+    // setup SM: No Input No Output
     sm_init();
-
-    // sm_set_er(0x31);
-    // sm_set_ir(0x91);
-
     sm_set_io_capabilities(IO_CAPABILITY_NO_INPUT_NO_OUTPUT);
     sm_set_authentication_requirements(SM_AUTHREQ_SECURE_CONNECTION | SM_AUTHREQ_BONDING);
     // sm_set_authentication_requirements(SM_AUTHREQ_SECURE_CONNECTION);
@@ -266,10 +262,6 @@ static void packet_handler(uint8_t packet_type, uint16_t channel, uint8_t *packe
             con_handle = hids_subevent_input_report_enable_get_con_handle(packet);
             printf("Report Characteristic Subscribed %u\n", hids_subevent_input_report_enable_get_enable(packet));
             // hid_embedded_start_typing();
-            // btstack_run_loop_set_timer_handler(&typing_timer, typing_timer_handler);
-            typing_timer.process = &typing_timer_handler;
-            btstack_run_loop_set_timer(&typing_timer, TYPING_PERIOD_MS);
-            btstack_run_loop_add_timer(&typing_timer);
             break;
         case HIDS_SUBEVENT_BOOT_KEYBOARD_INPUT_REPORT_ENABLE:
             con_handle = hids_subevent_boot_keyboard_input_report_enable_get_con_handle(packet);
