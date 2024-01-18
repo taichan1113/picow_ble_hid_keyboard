@@ -27,7 +27,7 @@
 #define MAX_NR_MESH_NETWORK_KEYS      (MAX_NR_MESH_SUBNETS+1)
 #endif 
 
-// #define WANT_HCI_DUMP 1
+#define WANT_HCI_DUMP 1
 #define ENABLE_LOG_INFO
 #define ENABLE_LOG_ERROR
 #define ENABLE_PRINTF_HEXDUMP
