@@ -186,27 +186,39 @@ static void le_keyboard_setup(void)
 }
 
 // HID Report sending
-// static void send_report(int modifier, int keycode)
-// {
-//     uint8_t report[] = {modifier, 0, keycode, 0, 0, 0, 0, 0};
-//     switch (protocol_mode)
-//     {
-//     case 0:
-//         hids_device_send_boot_keyboard_input_report(con_handle, report, sizeof(report));
-//         break;
-//     case 1:
-//         hids_device_send_input_report(con_handle, report, sizeof(report));
-//         break;
-//     default:
-//         break;
-//     }
-// }
-
-// On embedded systems, send constant demo text with fixed period
+static void send_report(int modifier, int keycode)
+{
+    uint8_t report[] = {modifier, 0, keycode, 0, 0, 0, 0, 0};
+    switch (protocol_mode)
+    {
+    case 0:
+        hids_device_send_boot_keyboard_input_report(con_handle, report, sizeof(report));
+        break;
+    case 1:
+        hids_device_send_input_report(con_handle, report, sizeof(report));
+        break;
+    default:
+        break;
+    }
+}
 
 #define TYPING_PERIOD_MS 50
 
 static btstack_timer_source_t typing_timer;
+
+static int send_keycode;
+static int send_modifier;
+static int send_keyup;
+
+static void send_key(int modifier, int keycode){
+    send_keycode = keycode;
+    send_modifier = modifier;
+    hids_device_request_can_send_now_event(con_handle);
+}
+
+static void typing_can_send_now(void){
+   send_report(send_modifier, send_keycode);
+}
 
 static void typing_timer_handler(btstack_timer_source_t *ts)
 {
@@ -219,12 +231,17 @@ static void typing_timer_handler(btstack_timer_source_t *ts)
     } report_q;
 
     if (queue_try_remove(&hid_keyboard_report_queue, &report_q)){
-        uint8_t report[] = { report_q.modifier, 0, 
-                    report_q.keycode[0],report_q.keycode[1],report_q.keycode[2],report_q.keycode[3],report_q.keycode[4],report_q.keycode[5]};
-        hids_device_send_input_report(con_handle, report, sizeof(report));
+        // uint8_t report[] = { report_q.modifier, 0, 
+        //             report_q.keycode[0],report_q.keycode[1],report_q.keycode[2],report_q.keycode[3],report_q.keycode[4],report_q.keycode[5]};
+        // hids_device_send_input_report(con_handle, report, sizeof(report));
+        send_key(report_q.modifier, report_q.keycode);
     }
 
-    hids_device_request_can_send_now_event(con_handle);
+    // hids_device_request_can_send_now_event(con_handle);
+
+    // set next timer
+    btstack_run_loop_set_timer(ts, TYPING_PERIOD_MS);
+    btstack_run_loop_add_timer(ts);
 
 }
 
@@ -274,6 +291,7 @@ static void packet_handler(uint8_t packet_type, uint16_t channel, uint8_t *packe
             printf("Protocol Mode: %s mode\n", hids_subevent_protocol_mode_get_protocol_mode(packet) ? "Report" : "Boot");
             break;
         case HIDS_SUBEVENT_CAN_SEND_NOW:
+            typing_can_send_now();
             // send_report(send_modifier, send_keycode);
             // btstack_run_loop_set_timer_handler(&typing_timer, typing_timer_handler);
             // typing_timer.process = &typing_timer_handler;
