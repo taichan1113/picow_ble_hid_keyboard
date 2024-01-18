@@ -28,10 +28,10 @@
 #endif 
 
 #define WANT_HCI_DUMP 1
-#define ENABLE_LOG_INFO
-#define ENABLE_LOG_ERROR
+// #define ENABLE_LOG_INFO
+// #define ENABLE_LOG_ERROR
 #define ENABLE_PRINTF_HEXDUMP
-#define ENABLE_SCO_OVER_HCI
+// #define ENABLE_SCO_OVER_HCI
 
 // BTstack configuration. buffers, sizes, ...
 #define HCI_OUTGOING_PRE_BUFFER_SIZE 4
