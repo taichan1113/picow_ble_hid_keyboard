@@ -202,7 +202,7 @@ static void send_report(int modifier, int keycode)
     }
 }
 
-#define TYPING_PERIOD_MS 50
+#define TYPING_PERIOD_MS 20
 
 static btstack_timer_source_t typing_timer;
 
