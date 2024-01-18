@@ -258,7 +258,8 @@ static void packet_handler(uint8_t packet_type, uint16_t channel, uint8_t *packe
             con_handle = hids_subevent_input_report_enable_get_con_handle(packet);
             printf("Report Characteristic Subscribed %u\n", hids_subevent_input_report_enable_get_enable(packet));
             // hid_embedded_start_typing();
-            typing_timer.process = &typing_timer_handler;
+            btstack_run_loop_remove_timer(&typing_timer);
+            btstack_run_loop_set_timer_handler(&typing_timer, typing_timer_handler);
             btstack_run_loop_set_timer(&typing_timer, TYPING_PERIOD_MS);
             btstack_run_loop_add_timer(&typing_timer);
             break;
@@ -271,12 +272,10 @@ static void packet_handler(uint8_t packet_type, uint16_t channel, uint8_t *packe
             printf("Protocol Mode: %s mode\n", hids_subevent_protocol_mode_get_protocol_mode(packet) ? "Report" : "Boot");
             break;
         case HIDS_SUBEVENT_CAN_SEND_NOW:
+            printf("can send now \n");
             // send_report(send_modifier, send_keycode);
-            // btstack_run_loop_set_timer_handler(&typing_timer, typing_timer_handler);
-            // typing_timer.process = &typing_timer_handler;
             btstack_run_loop_set_timer(&typing_timer, TYPING_PERIOD_MS);
             btstack_run_loop_add_timer(&typing_timer);
-
             break;
         default:
             break;
