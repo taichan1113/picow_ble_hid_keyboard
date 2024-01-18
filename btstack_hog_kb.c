@@ -146,9 +146,8 @@ static void le_keyboard_setup(void)
 
     // setup SM: No Input No Output
     sm_init();
-    sm_set_io_capabilities(IO_CAPABILITY_NO_INPUT_NO_OUTPUT);
-    sm_set_authentication_requirements(SM_AUTHREQ_SECURE_CONNECTION | SM_AUTHREQ_BONDING);
-    // sm_set_authentication_requirements(SM_AUTHREQ_SECURE_CONNECTION);
+    sm_set_io_capabilities(IO_CAPABILITY_KEYBOARD_ONLY);
+    sm_set_authentication_requirements(SM_AUTHREQ_BONDING);
 
     // sm_set_secure_connections_only_mode(true);
 

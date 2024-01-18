@@ -6,9 +6,28 @@
 #define ENABLE_LE_PERIPHERAL
 #define ENABLE_LE_CENTRAL
 #define ENABLE_L2CAP_LE_CREDIT_BASED_FLOW_CONTROL_MODE
-#define ENABLE_LE_SECURE_CONNECTIONS 
+// #define ENABLE_LE_SECURE_CONNECTIONS 
 #endif
-#define WANT_HCI_DUMP 1
+
+#ifdef ENABLE_MESH
+// Mesh Config
+#define ENABLE_MESH_ADV_BEARER
+#define ENABLE_MESH_GATT_BEARER
+#define ENABLE_MESH_PB_ADV
+#define ENABLE_MESH_PB_GATT
+#define ENABLE_MESH_PROXY_SERVER
+#define ENABLE_MESH_RELAY
+
+#define ENABLE_MESH_PROVISIONER
+
+#define MAX_NR_MESH_SUBNETS            2
+#define MAX_NR_MESH_TRANSPORT_KEYS    16
+#define MAX_NR_MESH_VIRTUAL_ADDRESSES 16
+// allow for one NetKey update
+#define MAX_NR_MESH_NETWORK_KEYS      (MAX_NR_MESH_SUBNETS+1)
+#endif 
+
+// #define WANT_HCI_DUMP 1
 #define ENABLE_LOG_INFO
 #define ENABLE_LOG_ERROR
 #define ENABLE_PRINTF_HEXDUMP
@@ -69,7 +88,7 @@
 #define ENABLE_SOFTWARE_AES128
 #define ENABLE_MICRO_ECC_FOR_LE_SECURE_CONNECTIONS
 
-#define HAVE_BTSTACK_STDIN
+// #define HAVE_BTSTACK_STDIN
 
 // To get the audio demos working even with HCI dump at 115200, this truncates long ACL packets
 //#define HCI_DUMP_STDOUT_MAX_SIZE_ACL 100
@@ -77,5 +96,11 @@
 #ifdef ENABLE_CLASSIC
 #define ENABLE_L2CAP_ENHANCED_RETRANSMISSION_MODE
 #endif
+
+#define HAVE_MALLOC
+
+// BTstack configuration. buffers, sizes, ...
+
+#define HCI_INCOMING_PRE_BUFFER_SIZE 6
 
 #endif // _PICO_BTSTACK_BTSTACK_CONFIG_H
