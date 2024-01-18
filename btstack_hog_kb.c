@@ -123,7 +123,7 @@ static btstack_packet_callback_registration_t hci_event_callback_registration;
 static btstack_packet_callback_registration_t sm_event_callback_registration;
 static uint8_t battery = 100;
 static hci_con_handle_t con_handle = HCI_CON_HANDLE_INVALID;
-// static uint8_t protocol_mode = HID_PROTOCOL_MODE_REPORT; // 0:_MODE_BOOT, 1:_MODE_REPORT
+static uint8_t protocol_mode = HID_PROTOCOL_MODE_REPORT; // 0:_MODE_BOOT, 1:_MODE_REPORT
 
 static void packet_handler(uint8_t packet_type, uint16_t channel, uint8_t *packet, uint16_t size);
 
