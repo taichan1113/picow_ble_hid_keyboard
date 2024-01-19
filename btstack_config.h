@@ -9,29 +9,29 @@
 // #define ENABLE_LE_SECURE_CONNECTIONS 
 #endif
 
-#ifdef ENABLE_MESH
-// Mesh Config
-#define ENABLE_MESH_ADV_BEARER
-#define ENABLE_MESH_GATT_BEARER
-#define ENABLE_MESH_PB_ADV
-#define ENABLE_MESH_PB_GATT
-#define ENABLE_MESH_PROXY_SERVER
-#define ENABLE_MESH_RELAY
+// #ifdef ENABLE_MESH
+// // Mesh Config
+// #define ENABLE_MESH_ADV_BEARER
+// #define ENABLE_MESH_GATT_BEARER
+// #define ENABLE_MESH_PB_ADV
+// #define ENABLE_MESH_PB_GATT
+// #define ENABLE_MESH_PROXY_SERVER
+// #define ENABLE_MESH_RELAY
 
-#define ENABLE_MESH_PROVISIONER
+// #define ENABLE_MESH_PROVISIONER
 
-#define MAX_NR_MESH_SUBNETS            2
-#define MAX_NR_MESH_TRANSPORT_KEYS    16
-#define MAX_NR_MESH_VIRTUAL_ADDRESSES 16
-// allow for one NetKey update
-#define MAX_NR_MESH_NETWORK_KEYS      (MAX_NR_MESH_SUBNETS+1)
-#endif 
+// #define MAX_NR_MESH_SUBNETS            2
+// #define MAX_NR_MESH_TRANSPORT_KEYS    16
+// #define MAX_NR_MESH_VIRTUAL_ADDRESSES 16
+// // allow for one NetKey update
+// #define MAX_NR_MESH_NETWORK_KEYS      (MAX_NR_MESH_SUBNETS+1)
+// #endif 
 
-#define WANT_HCI_DUMP 1
-// #define ENABLE_LOG_INFO
-// #define ENABLE_LOG_ERROR
+// #define WANT_HCI_DUMP 1
+#define ENABLE_LOG_INFO
+#define ENABLE_LOG_ERROR
 #define ENABLE_PRINTF_HEXDUMP
-// #define ENABLE_SCO_OVER_HCI
+#define ENABLE_SCO_OVER_HCI
 
 // BTstack configuration. buffers, sizes, ...
 #define HCI_OUTGOING_PRE_BUFFER_SIZE 4
@@ -101,6 +101,6 @@
 
 // BTstack configuration. buffers, sizes, ...
 
-#define HCI_INCOMING_PRE_BUFFER_SIZE 6
+// #define HCI_INCOMING_PRE_BUFFER_SIZE 6
 
 #endif // _PICO_BTSTACK_BTSTACK_CONFIG_H
