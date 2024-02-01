@@ -13,7 +13,11 @@ extern void btstack_main();
 
 int main()
 {
+#ifndef CYW43_WL_GPIO_LED_PIN
+#warning blink example requires a board with a regular LED
+#else
     stdio_init_all();
+    
     if (cyw43_arch_init()) {
         printf("cyw43_init_error\n");
         return 0;
@@ -30,9 +34,8 @@ int main()
         printf("tinyusb init successfully\n");
     }
 
-    
-
     while(1) {
+        cyw43_arch_gpio_put(CYW43_WL_GPIO_LED_PIN, 1);
         // tinyusb host task
         tuh_task();
     }
@@ -40,4 +43,5 @@ int main()
     
 
     return 0;
+#endif
 }
