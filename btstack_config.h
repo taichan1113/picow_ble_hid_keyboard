@@ -30,7 +30,7 @@
 // #define WANT_HCI_DUMP 1
 // #define ENABLE_LOG_INFO
 // #define ENABLE_LOG_ERROR
-// #define ENABLE_PRINTF_HEXDUMP
+#define ENABLE_PRINTF_HEXDUMP
 #define ENABLE_SCO_OVER_HCI
 
 // BTstack configuration. buffers, sizes, ...
@@ -93,9 +93,9 @@
 // To get the audio demos working even with HCI dump at 115200, this truncates long ACL packets
 //#define HCI_DUMP_STDOUT_MAX_SIZE_ACL 100
 
-#ifdef ENABLE_CLASSIC
-#define ENABLE_L2CAP_ENHANCED_RETRANSMISSION_MODE
-#endif
+//#ifdef ENABLE_CLASSIC
+//#define ENABLE_L2CAP_ENHANCED_RETRANSMISSION_MODE
+//#endif
 
 #define HAVE_MALLOC
 
