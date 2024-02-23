@@ -177,128 +177,128 @@ static void process_kbd_report(hid_keyboard_report_t const *report)
   prev_report = *report;
 }
 
-//--------------------------------------------------------------------+
-// Mouse
-//--------------------------------------------------------------------+
+// //--------------------------------------------------------------------+
+// // Mouse
+// //--------------------------------------------------------------------+
 
-void cursor_movement(int8_t x, int8_t y, int8_t wheel)
-{
-#if USE_ANSI_ESCAPE
-  // Move X using ansi escape
-  if ( x < 0)
-  {
-    printf(ANSI_CURSOR_BACKWARD(%d), (-x)); // move left
-  }else if ( x > 0)
-  {
-    printf(ANSI_CURSOR_FORWARD(%d), x); // move right
-  }
+// void cursor_movement(int8_t x, int8_t y, int8_t wheel)
+// {
+// #if USE_ANSI_ESCAPE
+//   // Move X using ansi escape
+//   if ( x < 0)
+//   {
+//     printf(ANSI_CURSOR_BACKWARD(%d), (-x)); // move left
+//   }else if ( x > 0)
+//   {
+//     printf(ANSI_CURSOR_FORWARD(%d), x); // move right
+//   }
 
-  // Move Y using ansi escape
-  if ( y < 0)
-  {
-    printf(ANSI_CURSOR_UP(%d), (-y)); // move up
-  }else if ( y > 0)
-  {
-    printf(ANSI_CURSOR_DOWN(%d), y); // move down
-  }
+//   // Move Y using ansi escape
+//   if ( y < 0)
+//   {
+//     printf(ANSI_CURSOR_UP(%d), (-y)); // move up
+//   }else if ( y > 0)
+//   {
+//     printf(ANSI_CURSOR_DOWN(%d), y); // move down
+//   }
 
-  // Scroll using ansi escape
-  if (wheel < 0)
-  {
-    printf(ANSI_SCROLL_UP(%d), (-wheel)); // scroll up
-  }else if (wheel > 0)
-  {
-    printf(ANSI_SCROLL_DOWN(%d), wheel); // scroll down
-  }
+//   // Scroll using ansi escape
+//   if (wheel < 0)
+//   {
+//     printf(ANSI_SCROLL_UP(%d), (-wheel)); // scroll up
+//   }else if (wheel > 0)
+//   {
+//     printf(ANSI_SCROLL_DOWN(%d), wheel); // scroll down
+//   }
 
-  printf("\r\n");
-#else
-  printf("(%d %d %d)\r\n", x, y, wheel);
-#endif
-}
+//   printf("\r\n");
+// #else
+//   printf("(%d %d %d)\r\n", x, y, wheel);
+// #endif
+// }
 
-static void process_mouse_report(hid_mouse_report_t const * report)
-{
-  static hid_mouse_report_t prev_report = { 0 };
+// static void process_mouse_report(hid_mouse_report_t const * report)
+// {
+//   static hid_mouse_report_t prev_report = { 0 };
 
-  //------------- button state  -------------//
-  uint8_t button_changed_mask = report->buttons ^ prev_report.buttons;
-  if ( button_changed_mask & report->buttons)
-  {
-    printf(" %c%c%c ",
-       report->buttons & MOUSE_BUTTON_LEFT   ? 'L' : '-',
-       report->buttons & MOUSE_BUTTON_MIDDLE ? 'M' : '-',
-       report->buttons & MOUSE_BUTTON_RIGHT  ? 'R' : '-');
-  }
+//   //------------- button state  -------------//
+//   uint8_t button_changed_mask = report->buttons ^ prev_report.buttons;
+//   if ( button_changed_mask & report->buttons)
+//   {
+//     printf(" %c%c%c ",
+//        report->buttons & MOUSE_BUTTON_LEFT   ? 'L' : '-',
+//        report->buttons & MOUSE_BUTTON_MIDDLE ? 'M' : '-',
+//        report->buttons & MOUSE_BUTTON_RIGHT  ? 'R' : '-');
+//   }
 
-  //------------- cursor movement -------------//
-  cursor_movement(report->x, report->y, report->wheel);
-}
+//   //------------- cursor movement -------------//
+//   cursor_movement(report->x, report->y, report->wheel);
+// }
 
-//--------------------------------------------------------------------+
-// Generic Report
-//--------------------------------------------------------------------+
-static void process_generic_report(uint8_t dev_addr, uint8_t instance, uint8_t const* report, uint16_t len)
-{
-  (void) dev_addr;
+// //--------------------------------------------------------------------+
+// // Generic Report
+// //--------------------------------------------------------------------+
+// static void process_generic_report(uint8_t dev_addr, uint8_t instance, uint8_t const* report, uint16_t len)
+// {
+//   (void) dev_addr;
 
-  uint8_t const rpt_count = hid_info[instance].report_count;
-  tuh_hid_report_info_t* rpt_info_arr = hid_info[instance].report_info;
-  tuh_hid_report_info_t* rpt_info = NULL;
+//   uint8_t const rpt_count = hid_info[instance].report_count;
+//   tuh_hid_report_info_t* rpt_info_arr = hid_info[instance].report_info;
+//   tuh_hid_report_info_t* rpt_info = NULL;
 
-  if ( rpt_count == 1 && rpt_info_arr[0].report_id == 0)
-  {
-    // Simple report without report ID as 1st byte
-    rpt_info = &rpt_info_arr[0];
-  }else
-  {
-    // Composite report, 1st byte is report ID, data starts from 2nd byte
-    uint8_t const rpt_id = report[0];
+//   if ( rpt_count == 1 && rpt_info_arr[0].report_id == 0)
+//   {
+//     // Simple report without report ID as 1st byte
+//     rpt_info = &rpt_info_arr[0];
+//   }else
+//   {
+//     // Composite report, 1st byte is report ID, data starts from 2nd byte
+//     uint8_t const rpt_id = report[0];
 
-    // Find report id in the array
-    for(uint8_t i=0; i<rpt_count; i++)
-    {
-      if (rpt_id == rpt_info_arr[i].report_id )
-      {
-        rpt_info = &rpt_info_arr[i];
-        break;
-      }
-    }
+//     // Find report id in the array
+//     for(uint8_t i=0; i<rpt_count; i++)
+//     {
+//       if (rpt_id == rpt_info_arr[i].report_id )
+//       {
+//         rpt_info = &rpt_info_arr[i];
+//         break;
+//       }
+//     }
 
-    report++;
-    len--;
-  }
+//     report++;
+//     len--;
+//   }
 
-  if (!rpt_info)
-  {
-    printf("Couldn't find the report info for this report !\r\n");
-    return;
-  }
+//   if (!rpt_info)
+//   {
+//     printf("Couldn't find the report info for this report !\r\n");
+//     return;
+//   }
 
-  // For complete list of Usage Page & Usage checkout src/class/hid/hid.h. For examples:
-  // - Keyboard                     : Desktop, Keyboard
-  // - Mouse                        : Desktop, Mouse
-  // - Gamepad                      : Desktop, Gamepad
-  // - Consumer Control (Media Key) : Consumer, Consumer Control
-  // - System Control (Power key)   : Desktop, System Control
-  // - Generic (vendor)             : 0xFFxx, xx
-  if ( rpt_info->usage_page == HID_USAGE_PAGE_DESKTOP )
-  {
-    switch (rpt_info->usage)
-    {
-      case HID_USAGE_DESKTOP_KEYBOARD:
-        TU_LOG1("HID receive keyboard report\r\n");
-        // Assume keyboard follow boot report layout
-        process_kbd_report( (hid_keyboard_report_t const*) report );
-      break;
+//   // For complete list of Usage Page & Usage checkout src/class/hid/hid.h. For examples:
+//   // - Keyboard                     : Desktop, Keyboard
+//   // - Mouse                        : Desktop, Mouse
+//   // - Gamepad                      : Desktop, Gamepad
+//   // - Consumer Control (Media Key) : Consumer, Consumer Control
+//   // - System Control (Power key)   : Desktop, System Control
+//   // - Generic (vendor)             : 0xFFxx, xx
+//   if ( rpt_info->usage_page == HID_USAGE_PAGE_DESKTOP )
+//   {
+//     switch (rpt_info->usage)
+//     {
+//       case HID_USAGE_DESKTOP_KEYBOARD:
+//         TU_LOG1("HID receive keyboard report\r\n");
+//         // Assume keyboard follow boot report layout
+//         process_kbd_report( (hid_keyboard_report_t const*) report );
+//       break;
 
-      case HID_USAGE_DESKTOP_MOUSE:
-        TU_LOG1("HID receive mouse report\r\n");
-        // Assume mouse follow boot report layout
-        process_mouse_report( (hid_mouse_report_t const*) report );
-      break;
+//       case HID_USAGE_DESKTOP_MOUSE:
+//         TU_LOG1("HID receive mouse report\r\n");
+//         // Assume mouse follow boot report layout
+//         process_mouse_report( (hid_mouse_report_t const*) report );
+//       break;
 
-      default: break;
-    }
-  }
-}
+//       default: break;
+//     }
+//   }
+// }

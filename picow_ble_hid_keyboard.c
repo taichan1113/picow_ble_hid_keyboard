@@ -13,9 +13,6 @@ extern void btstack_main();
 
 int main()
 {
-#ifndef CYW43_WL_GPIO_LED_PIN
-#warning blink example requires a board with a regular LED
-#else
     stdio_init_all();
     
     if (cyw43_arch_init()) {
@@ -27,6 +24,17 @@ int main()
 
     queue_init_with_spinlock(&hid_keyboard_report_queue, sizeof(hid_keyboard_report_t), 10, spin_lock_claim_unused(true));
     board_init();
+
+    int i = 0;
+    while(i<3) {
+        cyw43_arch_gpio_put(CYW43_WL_GPIO_LED_PIN, 1);
+        sleep_ms(200);
+        cyw43_arch_gpio_put(CYW43_WL_GPIO_LED_PIN, 0);
+        sleep_ms(200);
+        i++;
+    }
+    
+
     if (!tuh_init(BOARD_TUH_RHPORT)) { 
         printf("tuh init\n");
         return 0;
@@ -35,13 +43,9 @@ int main()
     }
 
     while(1) {
-        cyw43_arch_gpio_put(CYW43_WL_GPIO_LED_PIN, 1);
         // tinyusb host task
         tuh_task();
     }
 
-    
-
     return 0;
-#endif
 }

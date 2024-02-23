@@ -112,11 +112,11 @@ const uint8_t hid_descriptor_keyboard_boot_mode[] = {
     0xc0, // End collection
 };
 
-#define CHAR_ILLEGAL 0xff
-#define CHAR_RETURN '\n'
-#define CHAR_ESCAPE 27
-#define CHAR_TAB '\t'
-#define CHAR_BACKSPACE 0x7f
+// #define CHAR_ILLEGAL 0xff
+// #define CHAR_RETURN '\n'
+// #define CHAR_ESCAPE 27
+// #define CHAR_TAB '\t'
+// #define CHAR_BACKSPACE 0x7f
 
 // static btstack_timer_source_t heartbeat;
 static btstack_packet_callback_registration_t hci_event_callback_registration;
@@ -202,7 +202,7 @@ static void send_report(int modifier, int keycode)
     }
 }
 
-#define TYPING_PERIOD_MS 50
+#define TYPING_PERIOD_MS 30
 
 static btstack_timer_source_t typing_timer;
 
