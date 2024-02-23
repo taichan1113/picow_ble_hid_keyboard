@@ -4,7 +4,7 @@
 // BTstack features that can be enabled
 #ifdef ENABLE_BLE
 #define ENABLE_LE_PERIPHERAL
-#define ENABLE_LE_CENTRAL
+// #define ENABLE_LE_CENTRAL
 #define ENABLE_L2CAP_LE_CREDIT_BASED_FLOW_CONTROL_MODE
 // #define ENABLE_LE_SECURE_CONNECTIONS 
 #endif
@@ -28,9 +28,9 @@
 // #endif 
 
 // #define WANT_HCI_DUMP 1
-#define ENABLE_LOG_INFO
-#define ENABLE_LOG_ERROR
-#define ENABLE_PRINTF_HEXDUMP
+// #define ENABLE_LOG_INFO
+// #define ENABLE_LOG_ERROR
+// #define ENABLE_PRINTF_HEXDUMP
 #define ENABLE_SCO_OVER_HCI
 
 // BTstack configuration. buffers, sizes, ...
