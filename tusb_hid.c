@@ -113,13 +113,13 @@ void tuh_hid_report_received_cb(uint8_t dev_addr, uint8_t instance, uint8_t cons
     break;
 
     case HID_ITF_PROTOCOL_MOUSE:
-      TU_LOG2("HID receive boot mouse report\r\n");
-      process_mouse_report( (hid_mouse_report_t const*) report );
+      // TU_LOG2("HID receive boot mouse report\r\n");
+      // process_mouse_report( (hid_mouse_report_t const*) report );
     break;
 
     default:
       // Generic report requires matching ReportID and contents with previous parsed report info
-      process_generic_report(dev_addr, instance, report, len);
+      // process_generic_report(dev_addr, instance, report, len);
     break;
   }
 
